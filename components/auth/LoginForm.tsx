@@ -1,84 +1,115 @@
 "use client";
-
+import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+import { createClient } from "@/lib/supabase/client";
+import AuthCard from "./AuthCard";
 
 export default function LoginForm() {
+  const router = useRouter();
+  const supabase = createClient();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    console.log({
+    setLoading(true);
+    setError("");
+
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    router.push("/dashboard");
   }
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-2xl">
-      <h1 className="mb-2 text-3xl font-bold text-white">
-        Welcome Back
-      </h1>
-
-      <p className="mb-8 text-slate-400">
-        Sign in to your HireTrack account
-      </p>
-
+    <AuthCard
+      title="Welcome Back"
+      description="Sign in to continue using HireTrack Pro"
+    >
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label
-            htmlFor="email"
-            className="mb-2 block text-sm font-medium text-slate-300"
-          >
-            Email
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
 
-          <input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-blue-500"
-            required
-          />
+          <Input
+  id="email"
+  type="email"
+  placeholder="john@example.com"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="h-12 rounded-xl border-slate-700 bg-slate-950 focus-visible:border-blue-500 focus-visible:ring-blue-500"
+/>
         </div>
 
-        <div>
-          <label
-            htmlFor="password"
-            className="mb-2 block text-sm font-medium text-slate-300"
-          >
-            Password
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
 
-          <input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-blue-500"
-            required
-          />
+          <Input
+  id="password"
+  type="password"
+  placeholder="••••••••"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  className="h-12 rounded-xl border-slate-700 bg-slate-950 focus-visible:border-blue-500 focus-visible:ring-blue-500"
+  required
+/>
         </div>
 
-        <Button type="submit" className="w-full">
-          Sign In
-        </Button>
+        {error && (
+          <p className="text-sm text-red-500">
+            {error}
+          </p>
+        )}
+
+        <div className="flex items-center space-x-2">
+  <Checkbox id="remember" />
+
+  <Label
+    htmlFor="remember"
+    className="cursor-pointer text-slate-400"
+  >
+    Remember me
+  </Label>
+</div>
+
+        <Button
+  type="submit"
+  disabled={loading}
+  className="w-full h-12 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
+>
+  {loading ? "Signing In..." : "Sign In"}
+</Button>
+
+        <p className="text-center text-sm text-slate-400">
+          Don't have an account?{" "}
+          <Link
+            href="/register"
+            className="font-medium text-blue-400 hover:text-blue-300"
+          >
+            Create one
+          </Link>
+        </p>
       </form>
-
-      <p className="mt-6 text-center text-sm text-slate-400">
-        Don't have an account?{" "}
-        <a
-          href="/register"
-          className="font-medium text-blue-400 hover:text-blue-300"
-        >
-          Create one
-        </a>
-      </p>
-    </div>
+    </AuthCard>
   );
 }
