@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import {
   ResponsiveContainer,
   LineChart,
@@ -10,16 +12,62 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const data = [
-  { month: "Jan", candidates: 12 },
-  { month: "Feb", candidates: 19 },
-  { month: "Mar", candidates: 27 },
-  { month: "Apr", candidates: 22 },
-  { month: "May", candidates: 34 },
-  { month: "Jun", candidates: 41 },
-];
+import { createClient } from "@/lib/supabase/client";
+
+type ChartData = {
+  month: string;
+  candidates: number;
+};
 
 export default function HiringChart() {
+  const [data, setData] = useState<ChartData[]>([]);
+
+  useEffect(() => {
+    async function loadCandidates() {
+      const supabase = createClient();
+
+      const { data: candidates } = await supabase
+        .from("Candidate")
+        .select("createdAt")
+        .order("createdAt", {
+          ascending: true,
+        });
+
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      const counts: Record<string, number> = {};
+
+      candidates?.forEach((candidate) => {
+        const date = new Date(candidate.createdAt);
+        const month = months[date.getMonth()];
+
+        counts[month] = (counts[month] ?? 0) + 1;
+      });
+
+      const chartData = months.map((month) => ({
+        month,
+        candidates: counts[month] ?? 0,
+      }));
+
+      setData(chartData);
+    }
+
+    loadCandidates();
+  }, []);
+
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
       <h2 className="mb-6 text-xl font-semibold text-white">
@@ -36,7 +84,10 @@ export default function HiringChart() {
               stroke="#94A3B8"
             />
 
-            <YAxis stroke="#94A3B8" />
+            <YAxis
+              stroke="#94A3B8"
+              allowDecimals={false}
+            />
 
             <Tooltip />
 
