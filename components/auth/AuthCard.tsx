@@ -12,14 +12,14 @@ export default function AuthCard({
   children,
 }: AuthCardProps) {
   return (
-    <Card className="w-full max-w-md border-slate-800 bg-slate-900 shadow-[0_20px_80px_rgba(37,99,235,0.15)]">
-      <CardContent className="space-y-6 p-8">
+    <Card className="w-full max-w-lg border-slate-800 bg-slate-900 shadow-[0_20px_80px_rgba(37,99,235,0.15)]">
+      <CardContent className="space-y-6 p-10">
         <div className="space-y-2 text-center">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-blue-600 text-2xl font-bold text-white">
+          <div className="inline-flex h-20 w-20 items-center justify-center rounded-3xl bg-blue-600 text-2xl font-bold text-white">
             HT
           </div>
 
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-5xl font-bold tracking-tight text-white">
             {title}
           </h1>
 

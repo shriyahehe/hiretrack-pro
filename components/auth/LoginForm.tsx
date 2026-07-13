@@ -57,7 +57,7 @@ export default function LoginForm() {
   placeholder="john@example.com"
   value={email}
   onChange={(e) => setEmail(e.target.value)}
-  className="h-12 rounded-xl border-slate-700 bg-slate-950 focus-visible:border-blue-500 focus-visible:ring-blue-500"
+  className="h-14 rounded-xl border-slate-700 bg-slate-950 px-4 text-base transition-all focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/20"
 />
         </div>
 
@@ -70,7 +70,7 @@ export default function LoginForm() {
   placeholder="••••••••"
   value={password}
   onChange={(e) => setPassword(e.target.value)}
-  className="h-12 rounded-xl border-slate-700 bg-slate-950 focus-visible:border-blue-500 focus-visible:ring-blue-500"
+  className="h-14 rounded-xl border-slate-700 bg-slate-950 px-4 text-base transition-all focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/20"
   required
 />
         </div>
