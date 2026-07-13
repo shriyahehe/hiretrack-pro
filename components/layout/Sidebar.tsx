@@ -49,7 +49,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-slate-800 bg-slate-900">
+    <aside className="flex h-full w-full flex-col border-r border-slate-800 bg-slate-900">
       <div className="border-b border-slate-800 px-8 py-6">
         <h1 className="text-2xl font-bold text-white">
           HireTrack

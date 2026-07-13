@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 
 export default function Header() {
   return (
-    <header className="flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-8">
+    <header className="flex h-full w-full items-center justify-between border-b border-slate-800 bg-slate-950 px-8">
       <div className="relative w-96">
         <Search className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
 
